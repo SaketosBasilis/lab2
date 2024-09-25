@@ -30,7 +30,7 @@ class RBFNetwork:
             self.W = (np.linalg.pinv(phi.T@phi)@phi.T)@Y
             
     def update_center(self, sample,i,epochs):
-        k_neighbors = int(50*(1-i/epochs))
+        k_neighbors = int(70*(1-i/epochs))
         distances = np.sum((self.C-sample)**2,axis=1)
         winner = np.argmin(distances)
         for i in range(max(0,winner-int(k_neighbors/2)),min(winner+int(k_neighbors/2),self.C.shape[0])):

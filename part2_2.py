@@ -37,7 +37,7 @@ import matplotlib.pyplot as plt
 
 class RBFNetwork:
 
-    def __init__(self, num_centers, sigma=.9, hta = 0.2):
+    def __init__(self, num_centers, sigma=.7, hta = 0.4):
         self.num_centers = num_centers
         self.sigma = sigma
         self.hta = hta
@@ -51,6 +51,7 @@ class RBFNetwork:
             
     def update_center(self, sample,i,epochs):
         k_neighbors = max(int(5*(1-i/epochs)),1)
+        self.hta = self.hta*(1-i/epochs)
         distances = np.sum((self.C-sample)**2,axis=1)
         winner = np.argmin(distances)
         for i in range(winner-int(k_neighbors/2),winner+int(k_neighbors/2)):
@@ -83,7 +84,7 @@ class RBFNetwork:
     def predict(self, X):
         return self.phi(X).T@self.W
 
-epochs = 50
+epochs = 500
 
 nn = RBFNetwork(10)
 # Plot the results

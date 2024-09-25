@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import feed_forword
 class RBFNetwork:
-    def __init__(self, num_centers, X, sigma=.3, hta_init = 0.02, hta_final = 0.00001, epochs = 1000):
+    def __init__(self, num_centers, X, sigma=.8, hta_init = 0.02, hta_final = 0.00001, epochs = 1000):
         self.current_epoch = 0
         self.hta_final = hta_final
         self.epochs = epochs
@@ -27,8 +27,8 @@ class RBFNetwork:
     def forward(self, X):
 
         self.output = self.phi(X)@self.W
-        return np.where(self.output > 0, 1, -1)
-        #return self.output
+        #return np.where(self.output > 0, 1, -1)
+        return self.output
     def backward(self, X, y):
         self.W += self.hta*(((y.flatten()-self.output).reshape(1, len(y)))@self.phi(X)).flatten()
     def least_squares(self, X, Y):
@@ -52,8 +52,8 @@ def square(x):
     return f
 
 X = np.arange(0, 2 * np.pi, 0.1).reshape(-1,1)
-#T = np.sin(2 * X).reshape(-1,1)
-T = np.array(square(2 * X)).reshape(-1,1)
+T = np.sin(2 * X).reshape(-1,1)
+#T = np.array(square(2 * X)).reshape(-1,1)
 plt.plot(X, T, label='True function (sin(2x))', color='blue', linewidth=2)
 
 #T += np.random.normal(0, 0.1, T.shape)
@@ -61,8 +61,8 @@ plt.plot(X, T, label='True function (sin(2x))', color='blue', linewidth=2)
 #training_samples = np.column_stack((X, y_values))
 #plt.figure(figsize=(8, 6))
 X_test = np.arange(0.05, 2 * np.pi, 0.1).reshape(-1,1)
-#T_test = np.sin(2 * X_test).reshape(-1,1)
-T_test = np.array(square(2 * X_test)).reshape(-1,1)
+T_test = np.sin(2 * X_test).reshape(-1,1)
+#T_test = np.array(square(2 * X_test)).reshape(-1,1)
 
 #T_test += np.random.normal(0, 0.1, T_test.shape)
 
@@ -73,7 +73,7 @@ plt.plot(X_test, T_test, label='test set ', linewidth=2)
 
 plt.xlabel('x')
 plt.ylabel('sin(2x)')
-hidden = np.arange(1,63,5)
+hidden = np.arange(1,20,5)
 train_errors = []
 test_errors = []
 
@@ -105,10 +105,10 @@ for hidden_size in hidden:
     print("hidden size : ",hidden_size,"  test error : ",test_error)
     train_errors.append(train_error)
     test_errors.append(test_error)
-#nn = feed_forword.NeuralNetwork(input_size=1, hidden_size=40, output_size=1, hta_init=0.01,hta_final=0.0001)
+nn = feed_forword.NeuralNetwork(input_size=1, hidden_size=20, output_size=1, hta_init=0.01,hta_final=0.0001)
 
 # Train the model
-#nn.train( epochs=10000)
+nn.train( epochs=10000)
 plt.clf()
 print(hidden)
 print(train_errors)
